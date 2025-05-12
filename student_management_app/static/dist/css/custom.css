@@ -1,0 +1,73 @@
+/* custom.css */
+
+body {
+  font-family: "Raleway", sans-serif;
+}
+
+body.login-page {
+  background-image: url('https://images.pexels.com/photos/6985003/pexels-photo-6985003.jpeg?cs=srgb&dl=pexels-codioful-6985003.jpg&fm=jpg') !important;
+  background-position: center !important;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+.login-card-body{
+  background-color: rgba(0, 255, 21, 0.1);
+}
+
+
+
+.custom-sidebar {
+    background-color: #60cc84 !important;  /* ou la couleur que tu veux */
+    color: white !important;
+    font-family: "Raleway", sans-serif;
+  }
+  
+  .custom-sidebar .brand-link,
+  .custom-sidebar .nav-link,
+  .custom-sidebar a,
+  .custom-sidebar .info a {
+    color: white !important;
+    font-family: "Raleway", sans-serif;
+  }
+  
+  .custom-sidebar .nav-icon,
+  .custom-sidebar i {
+    color: white !important;
+  }
+  
+  .custom-sidebar .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
+    font-family: "Raleway", sans-serif;
+  }
+  
+  .custom-sidebar .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    font-family: "Raleway", sans-serif;
+  }
+.col-12 {
+    display: flex;
+    justify-content: center;
+}
+.my-btn {
+    background-color: rgb(6, 141, 67) !important;
+    color: white !important;
+    border: none;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+
+.login-logo-image{
+  margin-bottom: 10px;
+}
+
+.g-recaptcha{
+  margin-left: 10px;
+}
+
+.row a{
+  color: green;
+}
