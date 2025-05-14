@@ -156,3 +156,6 @@ EMAIL_FILE_PATH=os.path.join(BASE_DIR,"sent_mails")
 # import dj_database_url
 # prod_db=dj_database_url.config(conn_max_age=500)
 # DATABASES['default'].update(prod_db)
+
+# === Clé API pour le chatbot IA via OpenRouter ===
+OPENROUTER_API_KEY = "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"

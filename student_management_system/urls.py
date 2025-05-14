@@ -22,6 +22,8 @@ from django.views.generic import TemplateView
 from student_management_app import views, HodViews, StaffViews, StudentViews
 from student_management_app.EditResultVIewClass import EditResultViewClass
 from student_management_system import settings
+from student_management_app.views import student_chatbot_api
+
 
 urlpatterns = [
     path('demo',views.showDemoPage),
@@ -122,5 +124,6 @@ urlpatterns = [
     path('student_view_result',StudentViews.student_view_result,name="student_view_result"),
     path('join_class_room/<int:subject_id>/<int:session_year_id>',StudentViews.join_class_room,name="join_class_room"),
     path('node_modules/canvas-designer/widget.html',StaffViews.returnHtmlWidget,name="returnHtmlWidget"),
+    path("api/student-chatbot/", student_chatbot_api, name="student_chatbot_api"),
     path('testurl/',views.Testurl)
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

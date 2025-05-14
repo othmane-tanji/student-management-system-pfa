@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Student Management System | Staff Signup</title>
+  <title>Smart Student | Enseignant Signup</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -15,6 +15,7 @@
   <!-- icheck bootstrap -->
   <link rel="stylesheet" href="{% static "plugins/icheck-bootstrap/icheck-bootstrap.min.css" %}">
   <!-- Theme style -->
+  <link rel="stylesheet" href="{% static "dist/css/custom.css" %}">
   <link rel="stylesheet" href="{% static "dist/css/adminlte.min.css" %}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
@@ -22,12 +23,12 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Student</b> Management System</a>
+    <a href="../../index2.html"><b>Smart</b> Student </a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign Up Staff to Student Management System</p>
+      <p class="login-box-msg">S'inscrire en tant qu'Enseignant</p>
 
       <form action="/do_staff_signup" method="post" id="demo-form">
       {% csrf_token %}

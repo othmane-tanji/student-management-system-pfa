@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Student Management System | Signup Admin</title>
+  <title>Smart Student | Signup Admin</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -16,18 +16,19 @@
   <link rel="stylesheet" href="{% static "plugins/icheck-bootstrap/icheck-bootstrap.min.css" %}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{% static "dist/css/adminlte.min.css" %}">
+  <link rel="stylesheet" href="{% static "dist/css/custom.css" %}">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="../../index2.html"><b>Student</b> Management System</a>
+    <a href="../../index2.html"><b>Smart</b> Student</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
     <div class="card-body login-card-body">
-      <p class="login-box-msg">Sign Up Admin to Student Management System</p>
+      <p class="login-box-msg">S'inscrire en tant qu'Admin</p>
 
       <form action="/do_admin_signup" method="post" id="demo-form">
       {% csrf_token %}
@@ -59,7 +60,7 @@
         <div class="row">
           <!-- /.col -->
           <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block" >Signup Admin</button>
+            <button type="submit" class="btn btn-primary btn-block" >S'Inscrire</button>
           </div><!-- /.col -->
 
         </div>

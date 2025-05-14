@@ -176,3 +176,15 @@ def save_user_profile(sender,instance,**kwargs):
         instance.staffs.save()
     if instance.user_type==3:
         instance.students.save()
+class StudentAbsence(models.Model):
+    id = models.AutoField(primary_key=True)
+    student = models.ForeignKey(Students, on_delete=models.CASCADE)
+    subject = models.ForeignKey(Subjects, on_delete=models.CASCADE)
+    date = models.DateField()
+    is_justified = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('student', 'subject', 'date')
+    
+    objects = models.Manager()
