@@ -259,13 +259,193 @@ def student_chatbot_api(request):
                         ai_reply = response.json()["choices"][0]["message"]["content"]
 
                         final_reply = (
-                            f"⚠️ Tu as {absences} absences en {subject.upper()} et ta note est {note}.\n\n"
+                            f"⚠️ Tu as {absences} absences en {subject.upper()} pour rattraper le cour voici quelque cour de {subject.upper()} a suivre : \n\n"
                             f"{ai_reply}"
                         )
                         return JsonResponse({"reply": final_reply})
                 else:
                     return JsonResponse({"reply": "Pour quelle matière veux-tu connaître tes absences ?"})
 
+            # Les nom des matières que l'étudiant suit
+            if "matiere" in prompt or "cours" in prompt:
+                subjects = StudentResult.objects.filter(student_id=student).values_list('subject_id__subject_name', flat=True)
+                if subjects:
+                    subjects_list = "\n".join(subjects)
+                    return JsonResponse({
+                        "reply": f"Tu suis les matières suivantes :\n{subjects_list}"
+                    })
+                else:
+                    return JsonResponse({"reply": "Aucune matière trouvée."})
+            # modifier mes informations en tant qu'étudiant
+            if "modifier" in prompt or "changer" in prompt or "information" in prompt:
+                if "nom" in prompt or "prenom" in prompt:
+                    new_first_name = prompt.split(" ")[-1]
+                    student.admin.first_name = new_first_name
+                    student.admin.save()
+                    return JsonResponse({"reply": f"Ton prénom a été modifié en {new_first_name}."})
+                elif "email" in prompt:
+                    new_email = prompt.split(" ")[-1]
+                    student.admin.email = new_email
+                    student.admin.save()
+                    return JsonResponse({"reply": f"Ton email a été modifié en {new_email}."})
+                else:
+                    return JsonResponse({"reply": "Quelles informations veux-tu modifier ?"})
+            # Generer un quiz pour l'étudiant a propos de la matière qui il a demandé
+            if "quiz" in prompt or "exercice" in prompt:
+                subject = detect_subject(prompt, student)
+                if subject:
+                    ai_prompt = (
+                        f"Un étudiant a demandé un quiz sur {subject}. "
+                        f"Propose-lui 5 questions avec 4 choix de réponses (A, B, C, D) et la bonne réponse. "
+                        f"Réponds en français, 6 lignes maximum."
+                    )
+
+                    headers = {
+                        "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                        "Content-Type": "application/json"
+                    }
+                    payload = {
+                        "model": "mistralai/mistral-7b-instruct",
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "Tu es un assistant pédagogique intelligent. Propose des ressources concrètes pour progresser (liens vidéos, forums) et un encouragement. Réponds en français, 4 lignes max."
+                            },
+                            {"role": "user", "content": ai_prompt}
+                        ]
+                    }
+
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                        timeout=10
+                    )
+                    ai_reply = response.json()["choices"][0]["message"]["content"]
+                    return JsonResponse({"reply": ai_reply})
+                else:
+                    return JsonResponse({"reply": "Pour quelle matière veux-tu un quiz ?"})  
+            # Note Moyenne d'un étudiant en fonction de ses notes de l'examen
+            if "moyenne" in prompt or "note moyenne" in prompt:
+                try:
+                    results = StudentResult.objects.filter(student_id=student)
+                    if not results.exists():
+                        return JsonResponse({"reply": "Aucune note trouvée."})
+
+                    total_marks = sum(res.subject_exam_marks for res in results)
+                    average_marks = total_marks / len(results)
+
+                    return JsonResponse({
+                        "reply": f"Ta note moyenne est de {average_marks:.2f}/20."
+                    })
+                except Exception as e:
+                    return JsonResponse({"reply": "Erreur lors du calcul de la moyenne."})    
+            # l'etudiant va donner un text et il va demander de le resumer
+            if "resume" in prompt or "resumer" in prompt:
+                text_to_summarize = prompt.split("resume")[-1].strip()
+                if text_to_summarize:
+                    ai_prompt = (
+                        f"Un étudiant a demandé un résumé du texte suivant : {text_to_summarize}. "
+                        f"Propose-lui un résumé concis et clair. "
+                        f"Réponds en français, 6 lignes maximum."
+                    )
+
+                    headers = {
+                        "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                        "Content-Type": "application/json"
+                    }
+                    payload = {
+                        "model": "mistralai/mistral-7b-instruct",
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "Tu es un assistant pédagogique intelligent. Propose des ressources concrètes pour progresser (liens vidéos, forums) et un encouragement. Réponds en français, 4 lignes max."
+                            },
+                            {"role": "user", "content": ai_prompt}
+                        ]
+                    }
+
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                        timeout=10
+                    )
+                    ai_reply = response.json()["choices"][0]["message"]["content"]
+                    return JsonResponse({"reply": ai_reply})
+                else:
+                    return JsonResponse({"reply": "Veuillez fournir le texte à résumer."})
+            # Generer un exercice pour l'étudiant a propos de la matière qui il a demandé
+            if "exercice" in prompt or "devoir" in prompt:
+                subject = detect_subject(prompt, student)
+                if subject:
+                    ai_prompt = (
+                        f"Un étudiant a demandé un exercice sur {subject}. "
+                        f"Propose-lui 5 exercices avec des réponses détaillées. "
+                        f"Réponds en français, 6 lignes maximum."
+                    )
+
+                    headers = {
+                        "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                        "Content-Type": "application/json"
+                    }
+                    payload = {
+                        "model": "mistralai/mistral-7b-instruct",
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "Tu es un assistant pédagogique intelligent. Propose des ressources concrètes pour progresser (liens vidéos, forums) et un encouragement. Réponds en français, 4 lignes max."
+                            },
+                            {"role": "user", "content": ai_prompt}
+                        ]
+                    }
+
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                        timeout=10
+                    )
+                    ai_reply = response.json()["choices"][0]["message"]["content"]
+                    return JsonResponse({"reply": ai_reply})
+                else:
+                    return JsonResponse({"reply": "Pour quelle matière veux-tu un exercice ?"})    
+            # Aide sur les matières
+            if "aide" in prompt or "aide moi" in prompt or "exercice" in prompt or "devoir" in prompt:
+                subject = detect_subject(prompt, student)
+                if subject:
+                    ai_prompt = (
+                        f"Un étudiant a besoin d'aide en {subject}. "
+                        f"Propose-lui des ressources adaptées à son niveau pour l'aider à progresser : vidéos YouTube, "
+                        f"cours en ligne gratuits ou payants (OpenClassrooms, Udemy...) avec un lien de vidéo réel, pas généré. "
+                        f"Ne dépasse pas 6 lignes. Termine par un message de motivation."
+                    )
+
+                    headers = {
+                        "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",
+                        "Content-Type": "application/json"
+                    }
+                    payload = {
+                        "model": "mistralai/mistral-7b-instruct",
+                        "messages": [
+                            {
+                                "role": "system",
+                                "content": "Tu es un assistant pédagogique intelligent. Propose des ressources concrètes pour progresser (liens vidéos, forums) et un encouragement. Réponds en français, 4 lignes max."
+                            },
+                            {"role": "user", "content": ai_prompt}
+                        ]
+                    }
+
+                    response = requests.post(
+                        "https://openrouter.ai/api/v1/chat/completions",
+                        headers=headers,
+                        json=payload,
+                        timeout=10
+                    )
+                    ai_reply = response.json()["choices"][0]["message"]["content"]
+                    return JsonResponse({"reply": ai_reply})
+                else:
+                    return JsonResponse({"reply": "Pour quelle matière as-tu besoin d'aide ?"})
             # Gestion des notes
             if "note" in prompt or "resultat" in prompt:
                 subject = detect_subject(prompt, student)
@@ -377,7 +557,7 @@ def student_chatbot_api(request):
                 )
                 ai_reply = response.json()["choices"][0]["message"]["content"]
                 return JsonResponse({"reply": ai_reply})
-
+            
             # Orientation académique
             if "orientation" in prompt or "matiere" in prompt or "oriente" in prompt:
                 results = StudentResult.objects.filter(student_id=student)
@@ -418,7 +598,11 @@ def student_chatbot_api(request):
                 )
                 ai_reply = response.json()["choices"][0]["message"]["content"]
                 return JsonResponse({"reply": ai_reply})
-
+            # n'importe quel autre message
+            if "merci pour les info" in prompt or "thanks" in prompt:
+                return JsonResponse({
+                    "reply": f"De rien {student.admin.first_name} ! Je suis là pour t'aider. 😊"
+                })
             # Réponse IA par défaut
             headers = {
                 "Authorization": f"Bearer {settings.OPENROUTER_API_KEY}",

@@ -158,4 +158,4 @@ EMAIL_FILE_PATH=os.path.join(BASE_DIR,"sent_mails")
 # DATABASES['default'].update(prod_db)
 
 # === Clé API pour le chatbot IA via OpenRouter ===
-OPENROUTER_API_KEY = "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"
+OPENROUTER_API_KEY = "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"
