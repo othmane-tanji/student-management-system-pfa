@@ -86,6 +86,12 @@ def student_apply_leave(request):
     leave_data=LeaveReportStudent.objects.filter(student_id=staff_obj)
     return render(request,"student_template/student_apply_leave.html",{"leave_data":leave_data})
 
+def student_course(request):
+    student_obj=Students.objects.get(admin=request.user.id)
+    course_obj=Courses.objects.get(id=student_obj.course_id.id)
+    subjects=Subjects.objects.filter(course_id=course_obj)
+    return render(request,"student_template/student_course.html",{"course":course_obj,"subjects":subjects})
+
 def student_apply_leave_save(request):
     if request.method!="POST":
         return HttpResponseRedirect(reverse("student_apply_leave"))

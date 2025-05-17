@@ -1,0 +1,51 @@
+{% extends 'student_template/base_template.html' %}
+{% block page_title %}
+Mes Cours
+{% endblock page_title %}
+{% block main_content %}
+
+  <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-header" style="background-color: #007bff;">
+                <h3 class="card-title" style="color: white;">Mes Cours</h3>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table class="table table-bordered">
+                  <thead>                  
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Nom du cours</th>
+                      <th>Professeur</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% if subjects %}
+                      {% for subject in subjects %}
+                        <tr>
+                          <td>{{ forloop.counter }}.</td>
+                          <td>{{ subject.subject_name }}</td>
+                          <td>{{ subject.staff_id.get_full_name }}</td>
+                        </tr>
+                      {% endfor %}
+                    {% else %}
+                        <tr>
+                          <td colspan="3">Aucun cours trouvé.</td>
+                        </tr>
+                    {% endif %}
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /.content -->
+{% endblock main_content %}
