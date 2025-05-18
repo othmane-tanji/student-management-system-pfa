@@ -182,7 +182,10 @@ def staff_feedback(request):
     staff_id=Staffs.objects.get(admin=request.user.id)
     feedback_data=FeedBackStaffs.objects.filter(staff_id=staff_id)
     return render(request,"staff_template/staff_feedback.html",{"feedback_data":feedback_data})
-
+def staff_calendar(request):
+    subjects=Subjects.objects.filter(staff_id=request.user.id)
+    session_years=SessionYearModel.object.all()
+    return render(request,"staff_template/staff_calendar.html",{"subjects":subjects,"session_years":session_years})
 def staff_feedback_save(request):
     if request.method!="POST":
         return HttpResponseRedirect(reverse("staff_feedback_save"))

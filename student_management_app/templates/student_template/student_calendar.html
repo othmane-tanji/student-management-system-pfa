@@ -1,0 +1,71 @@
+{% extends 'student_template/base_template.html' %}
+{% load static %}
+
+{% block page_title %}
+Calendrier de l'etudiant
+{% endblock page_title %}
+
+{% block custom_css %}
+<!-- FullCalendar CSS -->
+<link rel="stylesheet" href="{% static 'plugins/fullcalendar/main.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/fullcalendar-daygrid/main.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/fullcalendar-timegrid/main.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/fullcalendar-bootstrap/main.min.css' %}">
+{% endblock custom_css %}
+
+{% block main_content %}
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <div class="card-body p-0">
+            <!-- THE CALENDAR -->
+            <div id="calendar"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock main_content %}
+
+{% block custom_js %}
+<script src="{% static 'plugins/fullcalendar/main.min.js' %}"></script>
+<script src="{% static 'plugins/fullcalendar-daygrid/main.min.js' %}"></script>
+<script src="{% static 'plugins/fullcalendar-timegrid/main.min.js' %}"></script>
+<script src="{% static 'plugins/fullcalendar-interaction/main.min.js' %}"></script>
+<script src="{% static 'plugins/fullcalendar-bootstrap/main.min.js' %}"></script>
+<script>
+  $(function () {
+    var date = new Date()
+    var d    = date.getDate(),
+        m    = date.getMonth(),
+        y    = date.getFullYear()
+
+    var Calendar = FullCalendar.Calendar;
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new Calendar(calendarEl, {
+      plugins: [ 'bootstrap', 'dayGrid', 'timeGrid' ],
+      header    : {
+        left  : 'prev,next today',
+        center: 'title',
+        right : 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      
+      editable  : false,   // Lecture seule
+      droppable : false    // Lecture seule
+    });
+
+    calendar.render();
+  })
+</script>
+{% endblock custom_js %}

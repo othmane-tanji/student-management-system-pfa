@@ -52,6 +52,15 @@
             </a>
           </li>
           <li class="nav-item">
+            {% url 'staff_calendar' as staff_calendar %}
+            <a href="{{ staff_calendar }}" class="nav-link {% if request.path == staff_calendar %} active {% endif %}">
+              <i class="nav-icon fa fa-calendar-check"></i>
+              <p>
+                Emploie du Temps
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             {% url 'staff_apply_leave' as staff_apply_leave %}
             <a href="{{ staff_apply_leave }}" class="nav-link {% if request.path == staff_apply_leave %} active {% endif %}">
               <i class="nav-icon fa fa-exclamation-triangle"></i>

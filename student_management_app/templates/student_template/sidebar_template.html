@@ -70,6 +70,15 @@
             </a>
           </li>
           <li class="nav-item">
+            {% url 'student_calendar' as student_calendar %}
+            <a href="{{ student_calendar }}" class="nav-link {% if request.path == student_calendar %} active {% endif %}">
+              <i class="nav-icon fa fa-graduation-cap"></i>
+              <p>
+                Emploi du temps
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             {% url 'student_view_result' as student_view_result %}
             <a href="{{ student_view_result }}" class="nav-link {% if request.path == student_view_result %} active {% endif %}">
               <i class="nav-icon fa fa-graduation-cap"></i>

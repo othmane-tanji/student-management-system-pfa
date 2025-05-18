@@ -176,6 +176,11 @@ def student_all_notification(request):
     student=Students.objects.get(admin=request.user.id)
     notifications=NotificationStudent.objects.filter(student_id=student.id)
     return render(request,"student_template/all_notification.html",{"notifications":notifications})
+def student_calendar(request):
+    student_obj=Students.objects.get(admin=request.user.id)
+    course_obj=Courses.objects.get(id=student_obj.course_id.id)
+    subjects=Subjects.objects.filter(course_id=course_obj)
+    return render(request,"student_template/student_calendar.html",{"course":course_obj,"subjects":subjects})
 
 def student_view_result(request):
     student=Students.objects.get(admin=request.user.id)
